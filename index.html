@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Blog</title>
+  <style>
+    body { font-family: sans-serif; margin: 40px; background: #f2f2f2; }
+    h1 { text-align: center; }
+    #form { margin-bottom: 20px; text-align: center; }
+    input, textarea, button { margin: 5px; padding: 5px; width: 200px; }
+    textarea { height: 60px; width: 400px; }
+    .post { background: white; padding: 10px; margin: 10px auto; max-width: 500px; border-radius: 8px; }
+    .date { color: gray; font-size: 0.8em; }
+  </style>
+</head>
+<body>
+  <h1>Mini Blog</h1>
+  <div id="form">
+    <input id="title" placeholder="Nadpis"><br>
+    <textarea id="content" placeholder="Obsah..."></textarea><br>
+    <button onclick="addPost()">Přidat příspěvek</button>
+  </div>
+  <div id="posts"></div>
+
+  <script>
+    const api = '/api/posts';
+
+    async function loadPosts() {
+      const res = await fetch(api);
+      const posts = await res.json();
+      const div = document.getElementById('posts');
+      div.innerHTML = posts.map(p => `
+        <div class="post">
+          <h3>${p.title}</h3>
+          <p>${p.content}</p>
+          <div class="date">${new Date(p.createdAt).toLocaleString()}</div>
+        </div>
+      `).join('');
+    }
+
+    async function addPost() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      await fetch(api, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ title, content })
+      });
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      loadPosts();
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
