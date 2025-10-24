@@ -1,33 +1,41 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
+
+console.log('Mongo URI:', process.env.MONGO_URI); // pro debug
 
 const app = express();
-app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // slouží frontend přímo z tohoto adresáře
+app.use(cors());
+app.use(express.static('public'));
 
-const Post = mongoose.model('Post', new mongoose.Schema({
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+
+const postSchema = new mongoose.Schema({
   title: String,
   content: String,
-  createdAt: { type: Date, default: Date.now }
-}));
+  date: { type: Date, default: Date.now }
+});
 
-// Získání všech příspěvků
+const Post = mongoose.model('Post', postSchema);
+
+// API – získání všech příspěvků
 app.get('/api/posts', async (req, res) => {
-  const posts = await Post.find().sort({ createdAt: -1 });
+  const posts = await Post.find().sort({ date: -1 });
   res.json(posts);
 });
 
-// Přidání nového příspěvku
+// API – přidání příspěvku
 app.post('/api/posts', async (req, res) => {
-  const post = new Post(req.body);
+  const { title, content } = req.body;
+  const post = new Post({ title, content });
   await post.save();
   res.json(post);
 });
 
-// Připojení k MongoDB a spuštění serveru
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(process.env.PORT, () => console.log('Server běží na portu', process.env.PORT)))
-  .catch(err => console.error('Chyba MongoDB:', err));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

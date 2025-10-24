@@ -1,0 +1,15 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 2em;
+  background: #fafafa;
+}
+#posts {
+  margin-bottom: 2em;
+}
+.post {
+  border-bottom: 1px solid #ddd;
+  padding: 1em 0;
+}
+h1 {
+  color: #333;
+}
