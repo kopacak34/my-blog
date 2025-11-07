@@ -2,18 +2,58 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Mini Blog</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog – News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .post {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .post h3 {
+      margin: 0 0 5px 0;
+    }
+    .post small {
+      color: gray;
+    }
+  </style>
 </head>
 <body>
-  <h1>Můj Blog</h1>
-  <div id="posts"></div>
-
+  <h1>📰 Novinky</h1>
   <form id="form">
-    <input type="text" id="title" placeholder="Název příspěvku" required><br>
-    <textarea id="content" placeholder="Obsah..." required></textarea><br>
-    <button>Přidat</button>
+    <input type="text" id="title" placeholder="Titulek" required>
+    <textarea id="content" placeholder="Obsah článku" rows="4" required></textarea>
+    <button type="submit">Přidat článek</button>
   </form>
+
+  <div id="posts"></div>
 
   <script src="script.js"></script>
 </body>
